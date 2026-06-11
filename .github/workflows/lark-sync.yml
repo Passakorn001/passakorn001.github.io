@@ -1,0 +1,42 @@
+name: Lark Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run without creating/deleting records"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  schedule:
+    # GitHub schedules run in UTC. This is every 15 minutes.
+    - cron: "*/15 * * * *"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run Lark sync
+        working-directory: lark-sync
+        env:
+          LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || vars.DRY_RUN || 'true' }}
+          DELETE_AFTER_SYNC: ${{ vars.DELETE_AFTER_SYNC || 'false' }}
+          MARK_SYNCED: ${{ vars.MARK_SYNCED || 'false' }}
+          CONFIG_JSON: ${{ secrets.CONFIG_JSON }}
+          CONFIG_PATH: config.json
+        run: node src/sync.js
