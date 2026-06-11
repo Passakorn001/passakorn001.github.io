@@ -1,0 +1,13 @@
+{
+  "name": "lark-sync",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node src/sync.js",
+    "dry-run": "node src/sync.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
