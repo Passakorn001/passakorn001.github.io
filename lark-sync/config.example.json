@@ -1,0 +1,53 @@
+{
+  "source": {
+    "appToken": "SOURCE_BASE_APP_TOKEN",
+    "tableId": "SOURCE_TABLE_ID",
+    "viewId": "SOURCE_VIEW_ID",
+    "pageSize": 20,
+    "maxRecordsPerRun": 20,
+    "fieldNames": [
+      "Req",
+      "Submitted",
+      "Respondents",
+      "Name",
+      "Address",
+      "Tel",
+      "Email",
+      "วันที่ซื้อสินค้า",
+      "SN",
+      "เลขคำสั่งซื้อ(MSO)",
+      "ไฟล์",
+      "ภาพถ่ายบิลใบเสร็จ"
+    ],
+    "filter": {
+      "conjunction": "or",
+      "conditions": []
+    }
+  },
+  "destination": {
+    "type": "base",
+    "appToken": "DESTINATION_BASE_APP_TOKEN",
+    "tableId": "DESTINATION_TABLE_ID",
+    "fieldMap": {
+      "Req": { "from": "Req", "transform": "raw" },
+      "Submitted": { "from": "Submitted", "transform": "raw" },
+      "Name": { "from": "Name", "transform": "text" },
+      "Address": { "from": "Address", "transform": "text" },
+      "Tel": { "from": "Tel", "transform": "text" },
+      "Email": { "from": "Email", "transform": "text" },
+      "วันที่ซื้อสินค้า": { "from": "วันที่ซื้อสินค้า", "transform": "raw" },
+      "SN": { "from": "SN", "transform": "text" },
+      "เลขคำสั่งซื้อ(MSO)": { "from": "เลขคำสั่งซื้อ(MSO)", "transform": "text" },
+      "ไฟล์": { "from": "ไฟล์", "transform": "attachment" },
+      "ภาพถ่ายบิลใบเสร็จ": { "from": "ภาพถ่ายบิลใบเสร็จ", "transform": "attachment" }
+    }
+  },
+  "afterSync": {
+    "deleteSourceRecord": false,
+    "markSourceRecord": {
+      "enabled": false,
+      "field": "Synced",
+      "value": true
+    }
+  }
+}
